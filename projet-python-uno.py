@@ -30,7 +30,6 @@ def nbr_joueurs():
     return player
     
 
-
 def creation_jeu_de_cartes():
     B = ['B 0']
     for i in range(1,10):
@@ -70,11 +69,22 @@ def creation_jeu_de_cartes():
     return jeu_de_cartes
     
     
-def distribution(nbr_joueurs):
-    m = zeros((4, 108))
-    for i in range(0, nbr_joueurs):
+def distribution(nbr, jeu_de_cartes):
+    nbr = len(nbr)
+    cartes_joueurs = []
+    for i in range(0,nbr):
+        cartes_joueurs.append([0]*108) #creation d'une liste de liste pouvant contenir les cartes des joueurs
+    for j in range(7):
+        for k in range(0,nbr):
+            cartes_joueurs[k][j] = jeu_de_cartes[0]
+            del jeu_de_cartes[0]
+    return cartes_joueurs
         
         
+def fausse():
+    fausse = []
+    fausse.append(jeu_de_cartes[0])
+            
     
     
 
@@ -85,8 +95,9 @@ def distribution(nbr_joueurs):
 # Script principal de test
 ###################################################################
 
-jeu_de_carte = creation_jeu_de_cartes()
 nbr = nbr_joueurs()
+jeu_de_cartes = creation_jeu_de_cartes()
+cartes_joueurs = distribution(nbr, jeu_de_cartes)
 
 
 
