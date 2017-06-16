@@ -22,7 +22,7 @@ def liste_joueurs():
     a = int(input())
     if a < 2 or a > 10:
         print("Le uno se joue de 2 à 10 joueurs.")
-        player = nbr_joueurs()
+        player = liste_joueurs()
     else:
         for i in range(1,a+1):
             i=str(i)
@@ -72,7 +72,7 @@ def creation_jeu_de_cartes():
 def distribution(nbr, jeu_de_cartes):
     cartes_joueurs = []
     for i in range(0,nbr):
-        cartes_joueurs.append([0]*108) #creation d'une liste de liste pouvant contenir les cartes des joueurs
+        cartes_joueurs.append([0]*7) #creation d'une liste de liste pouvant contenir les cartes des joueurs
     for j in range(7):
         for k in range(0,nbr):
             cartes_joueurs[k][j] = jeu_de_cartes[0]
@@ -81,26 +81,25 @@ def distribution(nbr, jeu_de_cartes):
      
 def qui_commence(nbr,liste_joueurs):
     joueur_qui_commence=randint(0,nbr -1)
-    joueur_commencant = liste_joueurs[joueur_qui_commence]
-    return joueur_commencant      
+    return joueur_qui_commence    
         
 def fausse(jeu_de_cartes):
     fausse = []
     fausse.append(jeu_de_cartes[0])
     return fausse
     
-def afficher_cartes(cartes_joueurs):
-    i = 0
-    cartes_utilisateur = []
-    while cartes_joueurs[0][i]!= 0:
-        cartes_utilisateur.append(cartes_joueurs[0][i])
-        i = i+1
-    return cartes_utilisateur
+# def afficher_cartes(cartes_joueurs):
+#     i = 0
+#     cartes_utilisateur = []
+#     while cartes_joueurs[0][i]!= 0:
+#         cartes_utilisateur.append(cartes_joueurs[0][i])
+#         i = i+1
+#     return cartes_utilisateur
 
 def test_gagnant(cartes_joueurs, nbr, liste_joueurs):
     i=0
     j=0
-    while cartes_joueurs[i]!=[0]*108 and j<nbr:
+    while cartes_joueurs[i]!=[] and j<nbr:
         j=j+1
         if j<nbr:
             i=j
@@ -110,13 +109,104 @@ def test_gagnant(cartes_joueurs, nbr, liste_joueurs):
         return True #il faudra retourner le nom du dernier joueur pour définir le gagnant
     else:
         return False
-    
-
-def jeu(nbr,jeu_de_cartes, joueur_qui_commence, fausse, liste_joueurs, cartes_joueurs):
-    
-
-
         
+def pioche(joueur_qui_pioche, cartes_joueurs, jeu_de_cartes,nb_carte_pioche):
+    for k in range(nb_carte_pioche):
+        cartes_joueurs[joueur_qui_joue].append(jeu_de_cartes[0])
+        del jeu_de_cartes[0]
+    
+def depose_carte(carte_jouée,joueur_qui_joue, sens, nbr):
+    if carte_jouée =='Joker':
+        print('Choisissez une couleur')
+        couleur=input('R,B,V,J ?')
+        while couleur!= R or couleur != B or couleur!= V or couleur!= J :
+            print('Faute de frappe')
+            print('choisissez une couleur')
+            couleur=input('R,B,V,J ?')
+        fausse.append(str(couleur))
+    elif carte_jouée == 'Joker +4':
+        print('Choisissez une couleur')
+        couleur=input('R,B,V,J ?')
+        while couleur!= R or couleur != B or couleur!= V or couleur!= J :
+            print('Faute de frappe')
+            print('choisissez une couleur')
+            couleur=input('R,B,V,J ?')
+        fausse.append(str(couleur))
+        if sens == 'droite' :
+            if joueur_qui_joue == nbr-1:
+                joeur_qui_pioche = 0
+                pioche(joueur_qui_pioche, cartes_joueurs, jeu_de_cartes,4)
+            else:
+                joeur_qui_pioche = joueur_qui_joue +1
+                pioche(joueur_qui_pioche, cartes_joueurs, jeu_de_cartes,4)
+        else:
+            if joueur_qui_joue == 0:
+                joeur_qui_pioche = nbr-1
+                pioche(joueur_qui_pioche, cartes_joueurs, jeu_de_cartes,4)
+            else:
+                joeur_qui_pioche = joueur_qui_joue - 1
+                pioche(joueur_qui_pioche, cartes_joueurs, jeu_de_cartes,4)
+    elif carte_jouée[2] == '+': #seul les cartes +2 ont cette possibilité, si carte jouée = carte +2 
+        if carte_jouée[0] == fausse[0][0] or carte_jouée[2] == fausse[0][2]:
+            if sens == 'droite' :
+                if joueur_qui_joue == nbr-1:
+                    joeur_qui_pioche = 0
+                    pioche(joueur_qui_pioche, cartes_joueurs, jeu_de_cartes,2)
+                else:
+                    joeur_qui_pioche = joueur_qui_joue +1
+                    pioche(joueur_qui_pioche, cartes_joueurs, jeu_de_cartes,2)
+            else:
+                if joueur_qui_joue == 0:
+                    joeur_qui_pioche = nbr-1
+                    pioche(joueur_qui_pioche, cartes_joueurs, jeu_de_cartes,2)
+                else:
+                    joeur_qui_pioche = joueur_qui_joue - 1
+                    pioche(joueur_qui_pioche, cartes_joueurs, jeu_de_cartes,2)
+    elif carte_jouée[2] == 'I'
+        if carte_jouée[0] == fausse[0][0] or carte_jouée[2] == fausse[0][2]:
+            if sens == 'droite':
+                sens = 'gauche'
+            else:
+                sens = 'droite'
+
+def test_carte(carte_jouée,fausse, joeur_qui_joue, sens, nbr):
+    if carte_jouée =='Joker':
+        return True
+    elif carte_jouée == 'Joker +4':
+        return True
+    elif carte_jouée[2] == '+': #seul les cartes +2 ont cette possibilité, si carte jouée = carte +2 
+        if carte_jouée[0] == fausse[0][0] or carte_jouée[2] == fausse[0][2]:
+            return True
+        else:
+            return False 
+    elif carte_jouée[2] == 'I'
+
+            return True
+        else:
+            return False
+    else:
+        #faire le test pour les cartes noramles 
+        
+            
+
+
+def jeu(nbr,jeu_de_cartes, joueur_qui_joue, fausse, liste_joueurs, cartes_joueurs):
+    if liste_joueurs[joueur_qui_joue] == 'Joueur 1':
+        print("A vous de jouer")
+        cartes_utilisateur=afficher_cartes(cartes_joueurs)
+        print('Vos cartes sont :',cartes_utilisateur)
+        print("Choisissez la carte à déposer")
+        print("Il faut sélectionner l emplacement dans la liste de la carte désirée")
+        print("Quel est votre choix")
+        choix=int(input())
+        while choix>len(cartes_utilisateur)-1:
+            print('Vous avez fait une faute de frappes, l indice choisi est trop élévé')
+            print('Quel est votre choix ?')
+            choix=int(input())
+        # autre boucle pour faire le test et pouvoir redemander un autre choix
+        carte_jouée=cartes_utilisateur[choix]
+        #def test qui test si la carte peut être posée
+        #en sortie de test, si la carte a pu être jouée alors supprimer la carte
     
 ###################################################################
 # Script principal de test
@@ -126,31 +216,22 @@ liste_joueurs = liste_joueurs()
 nbr = len(liste_joueurs)
 jeu_de_cartes = creation_jeu_de_cartes()
 cartes_joueurs = distribution(nbr, jeu_de_cartes)
-cartes_utilisateur = afficher_cartes(cartes_joueurs)
-print('Vos cartes sont :',cartes_utilisateur)
-joueur_qui_commence = qui_commence(nbr,liste_joueurs)
-print('Le joueur débutant la partie est le ',joueur_commencant)
+cartes_utilisateur = cartes_joueurs[0]
+
+joueur_qui_commence = liste_joueurs[qui_commence(nbr,liste_joueurs)]
+print('Le joueur débutant la partie est le ',joueur_qui_commence)
 print()
 print()
 fausse = fausse(jeu_de_cartes)
 print( "La carte du dessus est ", fausse)
+joeur_qui_joue = joueur_qui_commence
+sens='droite'
 
 
-if joueur_qui_commence=='Joueur 1':
-    print("A vous de jouer")
-    print("Choisissez la carte à déposer")
-    print("Il faut sélectionner l emplacement dans la liste de la carte désirée")
-    print("Quel est votre choix")
-    choix=int(input())
-    while choix>len(cartes_utilisateur)-1:
-        print('Vous avez fait une faute de frappes, l indice choisi est trop élévé')
-        print('Quel est votre choix ?")
-        choix=int(input())
 
-else:
+
+# else:
     
-
-
     
 test_gagnant(cartes_joueurs, nbr, liste_joueurs)
 while test_gagnant==False:
