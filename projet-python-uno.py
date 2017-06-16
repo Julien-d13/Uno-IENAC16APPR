@@ -71,105 +71,95 @@ def creation_jeu_de_cartes():
     
 def distribution(nbr, jeu_de_cartes):
     cartes_joueurs = []
-    for i in range(0,10):
-        cartes_joueurs.append([0]*7) #creation d'une liste de liste pouvant contenir les cartes des joueurs
+    for i in range(0,nbr):
+        cartes_joueurs.append([0]*108) #creation d'une liste de liste pouvant contenir les cartes des joueurs
     for j in range(7):
         for k in range(0,nbr):
             cartes_joueurs[k][j] = jeu_de_cartes[0]
             del jeu_de_cartes[0]
     return cartes_joueurs
-
-def qui_commence(nbr):
+     
+def qui_commence(nbr,liste_joueurs):
     joueur_qui_commence=randint(0,nbr -1)
-    return joueur_qui_commence        
+    joueur_commencant = liste_joueurs[joueur_qui_commence]
+    return joueur_commencant      
         
 def fausse(jeu_de_cartes):
     fausse = []
     fausse.append(jeu_de_cartes[0])
     return fausse
+    
+def afficher_cartes(cartes_joueurs):
+    i = 0
+    cartes_utilisateur = []
+    while cartes_joueurs[0][i]!= 0:
+        cartes_utilisateur.append(cartes_joueurs[0][i])
+        i = i+1
+    return cartes_utilisateur
 
-# def jeu(nbr,jeu_de_cartes, joueur_qui_commence, fausse, liste_joueurs, cartes_joueurs):
-#     i=0
-#     j=0
-#     while cartes_joueurs[i]!=[0]*108 and j<nbr:
-#         j=j+1
-#         if j<nbr:
-#             i=j
-#         else:
-#             i=j-1
-#         print(i)
-#     if j != nbr:
-#         gagnant=liste_joueurs[j]
-#         print(gagnant)
-#     else:
-#         print('pas de gagnant')
-        
+def test_gagnant(cartes_joueurs, nbr, liste_joueurs):
+    i=0
+    j=0
+    while cartes_joueurs[i]!=[0]*108 and j<nbr:
+        j=j+1
+        if j<nbr:
+            i=j
+        else:
+            i=j-1
+    if j != nbr:
+        return True #il faudra retourner le nom du dernier joueur pour définir le gagnant
+    else:
+        return False
+    
+
+def jeu(nbr,jeu_de_cartes, joueur_qui_commence, fausse, liste_joueurs, cartes_joueurs):
+    
+
 
         
     
 ###################################################################
 # Script principal de test
 ###################################################################
-player1=[]
-player2=[]
-player3=[]
-player4=[]
-player5=[]
-player6=[]
-player7=[]
-player8=[]
-player9=[]
-player10=[]
+
 liste_joueurs = liste_joueurs()
 nbr = len(liste_joueurs)
 jeu_de_cartes = creation_jeu_de_cartes()
-cartes_joueurs=distribution(nbr, jeu_de_cartes)
-i=0
-if i<nbr:
-    for j in range(0,7):
-        player1.append(cartes_joueurs[i][j])
-    i=i+1
-if i<nbr:
-    for j in range(0,7):
-        player2.append(cartes_joueurs[i][j])
-    i=i+1
-if i<nbr:
-    for j in range(0,7):
-        player3.append(cartes_joueurs[i][j])
-    i=i+1
-if i<nbr:
-    for j in range(0,7):
-        player4.append(cartes_joueurs[i][j])
-    i=i+1
-if i<nbr:
-    for j in range(0,7):
-        player5.append(cartes_joueurs[i][j])
-    i=i+1
-if i<nbr:
-    for j in range(0,7):
-        player6.append(cartes_joueurs[i][j])
-    i=i+1
-if i<nbr:
-    for j in range(0,7):
-        player7.append(cartes_joueurs[i][j])
-    i=i+1
-if i<nbr:
-    for j in range(0,7):
-        player8.append(cartes_joueurs[i][j])
-    i=i+1
-if i<nbr:
-    for j in range(0,7):
-        player9.append(cartes_joueurs[i][j])
-    i=i+1
-if i<nbr:
-    for j in range(0,7):
-        player10.append(cartes_joueurs[i][j])
-joueur_qui_commence = qui_commence(nbr)
-fausse = fausse(jeu_de_cartes)
-joueur_commencant = liste_joueurs[joueur_qui_commence]
+cartes_joueurs = distribution(nbr, jeu_de_cartes)
+cartes_utilisateur = afficher_cartes(cartes_joueurs)
+print('Vos cartes sont :',cartes_utilisateur)
+joueur_qui_commence = qui_commence(nbr,liste_joueurs)
 print('Le joueur débutant la partie est le ',joueur_commencant)
-print('Vos cartes sont :', player1)
-jeu(nbr,jeu_de_cartes, joueur_qui_commence, fausse, liste_joueurs, cartes_joueurs)
+print()
+print()
+fausse = fausse(jeu_de_cartes)
+print( "La carte du dessus est ", fausse)
 
 
-###################################################################
+if joueur_qui_commence=='Joueur 1':
+    print("A vous de jouer")
+    print("Choisissez la carte à déposer")
+    print("Il faut sélectionner l emplacement dans la liste de la carte désirée")
+    print("Quel est votre choix")
+    choix=int(input())
+    while choix>len(cartes_utilisateur)-1:
+        print('Vous avez fait une faute de frappes, l indice choisi est trop élévé')
+        print('Quel est votre choix ?")
+        choix=int(input())
+
+else:
+    
+
+
+    
+test_gagnant(cartes_joueurs, nbr, liste_joueurs)
+while test_gagnant==False:
+    jeu(nbr,jeu_de_cartes, joueur_qui_commence, fausse, liste_joueurs, cartes_joueurs)
+#retourner le nom du dernier joueur
+
+
+
+
+
+
+ 
