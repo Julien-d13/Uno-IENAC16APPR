@@ -110,12 +110,25 @@ def test_gagnant(cartes_joueurs, nbr, liste_joueurs):
     else:
         return False
         
+def a_qui_le_tour(sens,joueur_qui_joue):
+    if sens == 'droite' :
+        if joueur_qui_joue == nbr-1:
+            joeur_qui_joue = 0
+        else:
+            joeur_qui_jouer = joueur_qui_joue +1
+    else:
+        if joueur_qui_joue == 0:
+            joeur_qui_joue = nbr-1
+        else:
+            joeur_qui_joue = joueur_qui_joue - 1
+    return joueur_qui_joue
+        
 def pioche(joueur_qui_pioche, cartes_joueurs, jeu_de_cartes,nb_carte_pioche):
     for k in range(nb_carte_pioche):
         cartes_joueurs[joueur_qui_joue].append(jeu_de_cartes[0])
         del jeu_de_cartes[0]
     
-def depose_carte(carte_jouée,joueur_qui_joue, sens, nbr):
+def depose_carte(carte_jouée,joueur_qui_joue, sens, nbr,cartes_joueurs):
     if carte_jouée =='Joker':
         print('Choisissez une couleur')
         couleur=input('R,B,V,J ?')
@@ -123,6 +136,7 @@ def depose_carte(carte_jouée,joueur_qui_joue, sens, nbr):
             print('Faute de frappe')
             print('choisissez une couleur')
             couleur=input('R,B,V,J ?')
+        fausse.append(carte_jouée)
         fausse.append(str(couleur))
     elif carte_jouée == 'Joker +4':
         print('Choisissez une couleur')
@@ -131,43 +145,27 @@ def depose_carte(carte_jouée,joueur_qui_joue, sens, nbr):
             print('Faute de frappe')
             print('choisissez une couleur')
             couleur=input('R,B,V,J ?')
+        fausse.append(carte_jouée)
         fausse.append(str(couleur))
-        if sens == 'droite' :
-            if joueur_qui_joue == nbr-1:
-                joeur_qui_pioche = 0
-                pioche(joueur_qui_pioche, cartes_joueurs, jeu_de_cartes,4)
-            else:
-                joeur_qui_pioche = joueur_qui_joue +1
-                pioche(joueur_qui_pioche, cartes_joueurs, jeu_de_cartes,4)
-        else:
-            if joueur_qui_joue == 0:
-                joeur_qui_pioche = nbr-1
-                pioche(joueur_qui_pioche, cartes_joueurs, jeu_de_cartes,4)
-            else:
-                joeur_qui_pioche = joueur_qui_joue - 1
-                pioche(joueur_qui_pioche, cartes_joueurs, jeu_de_cartes,4)
+        joueur_qui_pioche = a_qui_le_tour(sens,joueur_qui_joue)
+        pioche(joueur_qui_pioche, cartes_joueurs, jeu_de_cartes,4)
     elif carte_jouée[2] == '+': #seul les cartes +2 ont cette possibilité, si carte jouée = carte +2 
         if carte_jouée[0] == fausse[0][0] or carte_jouée[2] == fausse[0][2]:
-            if sens == 'droite' :
-                if joueur_qui_joue == nbr-1:
-                    joeur_qui_pioche = 0
-                    pioche(joueur_qui_pioche, cartes_joueurs, jeu_de_cartes,2)
-                else:
-                    joeur_qui_pioche = joueur_qui_joue +1
-                    pioche(joueur_qui_pioche, cartes_joueurs, jeu_de_cartes,2)
-            else:
-                if joueur_qui_joue == 0:
-                    joeur_qui_pioche = nbr-1
-                    pioche(joueur_qui_pioche, cartes_joueurs, jeu_de_cartes,2)
-                else:
-                    joeur_qui_pioche = joueur_qui_joue - 1
-                    pioche(joueur_qui_pioche, cartes_joueurs, jeu_de_cartes,2)
-    elif carte_jouée[2] == 'I'
+            fausse.append(carte_jouée)
+            joeur_qui_pioche = a_qui_le_tour(sens,joueur_qui_joue)
+            pioche(joueur_qui_pioche, cartes_joueurs, jeu_de_cartes,2)
+    elif carte_jouée[2] == 'I':
         if carte_jouée[0] == fausse[0][0] or carte_jouée[2] == fausse[0][2]:
             if sens == 'droite':
+                fausse.append(carte_jouée)
                 sens = 'gauche'
             else:
+                fausse.append(carte_jouée)
                 sens = 'droite'
+    else:
+        if carte_jouée[0] == fausse[0][0] or carte_jouée[2] == fausse[0][2]:
+            fausse.append(carte_jouée)
+    
 
 def test_carte(carte_jouée,fausse, joeur_qui_joue, sens, nbr):
     if carte_jouée =='Joker':
@@ -179,15 +177,45 @@ def test_carte(carte_jouée,fausse, joeur_qui_joue, sens, nbr):
             return True
         else:
             return False 
-    elif carte_jouée[2] == 'I'
-
+    elif carte_jouée[2] == 'I':
+        if carte_jouée[0] == fausse[0][0] or carte_jouée[2] == fausse[0][2]:    
             return True
         else:
             return False
     else:
-        #faire le test pour les cartes noramles 
-        
+        if carte_jouée[0] == fausse[0][0] or carte_jouée[2] == fausse[0][2]:
+            return True
+        else:
+            return False 
             
+            
+def choix(nbr,jeu_de_cartes, joueur_qui_joue, fausse, liste_joueurs, cartes_joueurs):
+    print("A vous de jouer")
+    cartes_utilisateur=afficher_cartes(cartes_joueurs)
+    print('Vos cartes sont :',cartes_utilisateur)
+    print("Choisissez la carte à déposer")
+    print("Il faut sélectionner l emplacement dans la liste de la carte désirée")
+    print("Quel est votre choix")
+    print("Si vous ne pouvez pas jouer, entrez -1")
+    choix=int(input())
+    while choix>len(cartes_utilisateur)-1:
+        print('Vous avez fait une faute de frappes, l indice choisi est trop élévé')
+        print('Quel est votre choix ?')
+        choix=int(input())
+        #revoir les possibilités pour le choix : pas jolie de mettre le -1
+    if choix == -1:
+        pioche(joueur_qui_pioche, cartes_joueurs, jeu_de_cartes,1)
+        if test_carte(cartes_utilisateur[0], joueur_qui_joue, sens, nbr) == True:
+            depose_carte(carte_utilisateur[0],joueur_qui_joue, sens, nbr)
+            del cartes_utilisateur[0]
+        else:
+            joueur_qui_joue = a_qui_le_tour(sens,joueur_qui_joue)
+    else:
+        carte_jouée=cartes_utilisateur[choix]
+        test = test_carte(carte_jouée,fausse, joeur_qui_joue, sens, nbr) 
+        while test == False:
+            choix(nbr,jeu_de_cartes, joueur_qui_joue, fausse, liste_joueurs, cartes_joueurs)
+        depose_carte(carte_utilisateur[0],joueur_qui_joue, sens, nbr)
 
 
 def jeu(nbr,jeu_de_cartes, joueur_qui_joue, fausse, liste_joueurs, cartes_joueurs):
@@ -198,16 +226,35 @@ def jeu(nbr,jeu_de_cartes, joueur_qui_joue, fausse, liste_joueurs, cartes_joueur
         print("Choisissez la carte à déposer")
         print("Il faut sélectionner l emplacement dans la liste de la carte désirée")
         print("Quel est votre choix")
+        print("Si vous ne pouvez pas jouer, entrez -1")
         choix=int(input())
         while choix>len(cartes_utilisateur)-1:
             print('Vous avez fait une faute de frappes, l indice choisi est trop élévé')
             print('Quel est votre choix ?')
             choix=int(input())
+            #revoir les possibilités pour le choix : pas jolie de mettre le -1
+        if choix == -1:
+            pioche(joueur_qui_pioche, cartes_joueurs, jeu_de_cartes,1)
+            if test_carte(cartes_utilisateur[0], joueur_qui_joue, sens, nbr) == True:
+                depose_carte(carte_utilisateur[0],joueur_qui_joue, sens, nbr)
+                del cartes_utilisateur[0]
+            else:
+                joueur_qui_joue) = a_qui_le_tour(sens,joueur_qui_joue)
+        else:
+            carte_jouée=cartes_utilisateur[choix]
+            test = test_carte(carte_jouée,fausse, joeur_qui_joue, sens, nbr) 
+            while test =! True:
+                
+                #peut être faut-il créer une fonction choix
+        
         # autre boucle pour faire le test et pouvoir redemander un autre choix
-        carte_jouée=cartes_utilisateur[choix]
-        #def test qui test si la carte peut être posée
-        #en sortie de test, si la carte a pu être jouée alors supprimer la carte
-    
+        # def test qui test si la carte peut être posée
+        # en sortie de test, si la carte a pu être jouée alors supprimer la carte
+        #besoin de tester si le paquet de carte est vide si oui, reprendre la fausse, la mélanger et retirer les cartes couleurs
+        #choisir si on prend la fonction choix ou non
+        #faire attention aux fonctions test et dépose pour l'IA
+        
+        
 ###################################################################
 # Script principal de test
 ###################################################################
