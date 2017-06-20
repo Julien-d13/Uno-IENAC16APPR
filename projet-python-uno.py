@@ -36,28 +36,28 @@ def creation_jeu_de_cartes():
         i = str(i)
         B.append('B '+i)
         B.append('B '+i)
-    B = B+['B Passe']*2 + ['B +2']*2 + ['B Inverse']*2
+    B = B+ ['B +2']*2 # + ['B Passe']*2 + ['B Inverse']*2
     
     R=['R 0']
     for i in range(1,10):
         i = str(i)
         R.append('R '+i)
         R.append('R '+i)
-    R = R+['R Passe']*2 + ['R +2']*2 + ['R Inverse']*2
+    R = R+ ['R +2']*2  #+ ['R Inverse']*2 + ['R Passe']*2 
     
     V = ['V 0']
     for i in range(1,10):
         i=str(i)
         V.append('V '+i)
         V.append('V '+i)
-    V = V+['V Passe']*2 + ['V +2']*2 + ['V Inverse']*2
+    V = V + ['V +2']*2 # + ['V Passe']*2 +['V Inverse']*2
     
     J = ['J 0']
     for i in range(1,10):
         i=str(i)
         J.append('J '+i)
         J.append('J '+i)
-    J = J+['J Passe']*2 + ['J +2']*2 + ['J Inverse']*2
+    J = J+['J Passe']*2  #+ ['J Inverse']*2 + ['J +2']*2
     
     Joker = ['Joker']*4
     Super_Joker = ['Joker +4']*4
@@ -87,14 +87,6 @@ def fausse(jeu_de_cartes):
     fausse = []
     fausse.append(jeu_de_cartes[0])
     return fausse
-    
-# def afficher_cartes(cartes_joueurs):
-#     i = 0
-#     cartes_utilisateur = []
-#     while cartes_joueurs[0][i]!= 0:
-#         cartes_utilisateur.append(cartes_joueurs[0][i])
-#         i = i+1
-#     return cartes_utilisateur
 
 def test_gagnant(cartes_joueurs, nbr, liste_joueurs):
     i=0
@@ -110,65 +102,66 @@ def test_gagnant(cartes_joueurs, nbr, liste_joueurs):
     else:
         return False
         
-def a_qui_le_tour(sens,joueur_qui_joue):
+def a_qui_le_tour(sens,joueur_qui_joue,nbr):
     if sens == 'droite' :
         if joueur_qui_joue == nbr-1:
-            joeur_qui_joue = 0
+            joueur_qui_joue = 0
         else:
-            joeur_qui_jouer = joueur_qui_joue +1
+            joueur_qui_joue = joueur_qui_joue +1
     else:
         if joueur_qui_joue == 0:
-            joeur_qui_joue = nbr-1
+            joueur_qui_joue = nbr-1
         else:
-            joeur_qui_joue = joueur_qui_joue - 1
+            joueur_qui_joue = joueur_qui_joue - 1
     return joueur_qui_joue
         
 def pioche(joueur_qui_pioche, cartes_joueurs, jeu_de_cartes,nb_carte_pioche):
     for k in range(nb_carte_pioche):
-        cartes_joueurs[joueur_qui_joue].append(jeu_de_cartes[0])
+        cartes_joueurs[joueur_qui_joue].insert(0,jeu_de_cartes[0])
         del jeu_de_cartes[0]
     
 def depose_carte(carte_jouée,joueur_qui_joue, sens, nbr,cartes_joueurs):
     if carte_jouée =='Joker':
         print('Choisissez une couleur')
         couleur=input('R,B,V,J ?')
-        while couleur!= R or couleur != B or couleur!= V or couleur!= J :
+        while couleur!= 'R' and couleur != 'B' and couleur!= 'V' and couleur!= 'J' :
             print('Faute de frappe')
             print('choisissez une couleur')
             couleur=input('R,B,V,J ?')
-        fausse.append(carte_jouée)
-        fausse.append(str(couleur))
+        couleur=couleur + '   ' # permet de gérer les test sur les cartes minimum de longueur 3
+        fausse.insert(0,carte_jouée)
+        fausse.insert(0,str(couleur))
     elif carte_jouée == 'Joker +4':
         print('Choisissez une couleur')
         couleur=input('R,B,V,J ?')
-        while couleur!= R or couleur != B or couleur!= V or couleur!= J :
+        while couleur!= 'R' and couleur != 'B' and couleur!= 'V' and couleur!= 'J' :
             print('Faute de frappe')
             print('choisissez une couleur')
-            couleur=input('R,B,V,J ?')
-        fausse.append(carte_jouée)
-        fausse.append(str(couleur))
-        joueur_qui_pioche = a_qui_le_tour(sens,joueur_qui_joue)
+            couleur = input('R,B,V,J ?')
+        couleur = couleur + '   ' 
+        fausse.insert(0,carte_jouée)
+        fausse.insert(0,str(couleur))
+        joueur_qui_pioche = a_qui_le_tour(sens,joueur_qui_joue,nbr)
         pioche(joueur_qui_pioche, cartes_joueurs, jeu_de_cartes,4)
-    elif carte_jouée[2] == '+': #seul les cartes +2 ont cette possibilité, si carte jouée = carte +2 
+    elif carte_jouée[2] == '+': # seul les cartes +2 ont cette possibilité, si carte jouée = carte +2 
         if carte_jouée[0] == fausse[0][0] or carte_jouée[2] == fausse[0][2]:
-            fausse.append(carte_jouée)
-            joeur_qui_pioche = a_qui_le_tour(sens,joueur_qui_joue)
+            fausse.insert(0,carte_jouée)
+            joueur_qui_pioche = a_qui_le_tour(sens,joueur_qui_joue,nbr)
             pioche(joueur_qui_pioche, cartes_joueurs, jeu_de_cartes,2)
-    elif carte_jouée[2] == 'I':
-        if carte_jouée[0] == fausse[0][0] or carte_jouée[2] == fausse[0][2]:
-            if sens == 'droite':
-                fausse.append(carte_jouée)
-                sens = 'gauche'
-            else:
-                fausse.append(carte_jouée)
-                sens = 'droite'
+    # elif carte_jouée[2] == 'I':
+    #     if carte_jouée[0] == fausse[0][0] or carte_jouée[2] == fausse[0][2]:
+    #         if sens == 'droite':
+    #             fausse.insert(0,carte_jouée)
+    #             sens = 'gauche'
+    #         else:
+    #             fausse.insert(0,carte_jouée)
+    #             sens = 'droite'
     else:
         if carte_jouée[0] == fausse[0][0] or carte_jouée[2] == fausse[0][2]:
-            fausse.append(carte_jouée)
+            fausse.insert(0,carte_jouée)
     
 def depose_carte_IA(carte_jouée,joueur_qui_joue, sens, nbr,cartes_joueurs):
     if carte_jouée =='Joker':
-        print('Choisissez une couleur')
         V=0
         J=0
         R=0
@@ -184,27 +177,27 @@ def depose_carte_IA(carte_jouée,joueur_qui_joue, sens, nbr,cartes_joueurs):
                 B += 1
         maxi = max(V,J,R,B)
         if R == maxi:
-            couleur = R
+            couleur = 'R'
         elif V == maxi:
-            couleur = V
+            couleur = 'V'
         elif J == maxi:
-            couleur = J
+            couleur = 'J'
         elif B == maxi:
-            couleur = B
+            couleur = 'B'
         else:
             n = randint(0,3)
             if n == 0:
-                couleur = V
+                couleur = 'V'
             if n == 1:
-                couleur = J
+                couleur = 'J'
             if n == 2:
-                couleur = R
+                couleur = 'R'
             if n == 3:
-                couleur = B
-        fausse.append(carte_jouée)
-        fausse.append(str(couleur))
+                couleur = 'B'
+        couleur=couleur + '   '
+        fausse.insert(0,carte_jouée)
+        fausse.insert(0,str(couleur))
     elif carte_jouée == 'Joker +4':
-        print('Choisissez une couleur')
         V=0
         J=0
         R=0
@@ -220,43 +213,46 @@ def depose_carte_IA(carte_jouée,joueur_qui_joue, sens, nbr,cartes_joueurs):
                 B += 1
         maxi = max(V,J,R,B)
         if R == maxi:
-            couleur = R
+            couleur = 'R'
         elif V == maxi:
-            couleur = V
+            couleur = 'V'
         elif J == maxi:
-            couleur = J
+            couleur = 'J'
         elif B == maxi:
-            couleur = B
+            couleur = 'B'
         else:
             n = randint(0,3)
             if n == 0:
-                couleur = V
+                couleur = 'V'
             if n == 1:
-                couleur = J
+                couleur = 'J'
             if n == 2:
-                couleur = R
+                couleur = 'R'
             if n == 3:
-                couleur = B
-        joueur_qui_pioche = a_qui_le_tour(sens,joueur_qui_joue)
+                couleur = 'B'
+        couleur=couleur + '   '
+        fausse.insert(0,carte_jouée)
+        fausse.insert(0,str(couleur))
+        joueur_qui_pioche = a_qui_le_tour(sens,joueur_qui_joue,nbr)
         pioche(joueur_qui_pioche, cartes_joueurs, jeu_de_cartes,4)
-    elif carte_jouée[2] == '+': #seul les cartes +2 ont cette possibilité, si carte jouée = carte +2 
+    elif carte_jouée[2] == '+': # seul les cartes +2 ont cette possibilité, si carte jouée = carte +2 
         if carte_jouée[0] == fausse[0][0] or carte_jouée[2] == fausse[0][2]:
-            fausse.append(carte_jouée)
-            joeur_qui_pioche = a_qui_le_tour(sens,joueur_qui_joue)
+            fausse.insert(0,carte_jouée)
+            joueur_qui_pioche = a_qui_le_tour(sens,joueur_qui_joue, nbr)
             pioche(joueur_qui_pioche, cartes_joueurs, jeu_de_cartes,2)
-    elif carte_jouée[2] == 'I':
-        if carte_jouée[0] == fausse[0][0] or carte_jouée[2] == fausse[0][2]:
-            if sens == 'droite':
-                fausse.append(carte_jouée)
-                sens = 'gauche'
-            else:
-                fausse.append(carte_jouée)
-                sens = 'droite'
+    # elif carte_jouée[2] == 'I':
+    #     if carte_jouée[0] == fausse[0][0] or carte_jouée[2] == fausse[0][2]:
+    #         if sens == 'droite':
+    #             fausse.insert(0,carte_jouée)
+    #             sens = 'gauche'
+    #         else:
+    #             fausse.insert(0,carte_jouée)
+    #             sens = 'droite'
     else:
         if carte_jouée[0] == fausse[0][0] or carte_jouée[2] == fausse[0][2]:
-            fausse.append(carte_jouée)
+            fausse.insert(0,carte_jouée)
 
-def test_carte(carte_jouée,fausse, joeur_qui_joue, sens, nbr):
+def test_carte(carte_jouée,fausse, joueur_qui_joue, sens, nbr):
     if carte_jouée =='Joker':
         if fausse[0] == 'Joker +4':
             return False
@@ -286,70 +282,82 @@ def test_carte(carte_jouée,fausse, joeur_qui_joue, sens, nbr):
 
 def IA(nbr,jeu_de_cartes, joueur_qui_joue, fausse, cartes_joueurs):
     i=0
-    while test_carte(carte_joueurs[joueur_qui_joue][i], fausse, joueur_qui_joue, sens, nbr) == False and i<=len(carte_joueurs[joueur_qui_joue]):
-        i=i+1
-    if i < len(carte_joueurs[joueur_qui_joue]):
-        depose_carte_IA(carte_joueur[joueur_qui_joue][i],joueur_qui_joue, sens, nbr,cartes_joueurs)
+    j=0
+    while test_carte(cartes_joueurs[joueur_qui_joue][i], fausse, joueur_qui_joue, sens, nbr) == False and j !=1 :
+        i = i+1
+        if i >= len(cartes_joueurs[joueur_qui_joue]):
+            i=i-1
+            j=1
+            
+    if j == 0:
+        print('Je joue', cartes_joueurs[joueur_qui_joue][i])
+        depose_carte_IA(cartes_joueurs[joueur_qui_joue][i],joueur_qui_joue, sens, nbr,cartes_joueurs)
+        del cartes_joueurs[joueur_qui_joue][i]
     else:
+        print('Je pioche')
         pioche(joueur_qui_joue, cartes_joueurs, jeu_de_cartes,1)
+        if test_carte(cartes_joueurs[joueur_qui_joue][0], fausse, joueur_qui_joue, sens, nbr) == True:
+            print('Je joue', cartes_joueurs[joueur_qui_joue][0])
+            depose_carte(cartes_joueurs[joueur_qui_joue][0],joueur_qui_joue, sens, nbr, cartes_joueurs)
+            del cartes_joueurs[joueur_qui_joue][0]
         
         
         
         
 
 
-def choix(nbr,jeu_de_cartes, joueur_qui_joue, fausse, cartes_joueurs):
+def choix_cartes(nbr,jeu_de_cartes, joueur_qui_joue, fausse, cartes_joueurs):
     print("A vous de jouer")
-    cartes_utilisateur=afficher_cartes(cartes_joueurs)
-    print('Vos cartes sont :',cartes_utilisateur)
+    print('Vos cartes sont :',cartes_joueurs[0])
     print("Choisissez la carte à déposer")
     print("Il faut sélectionner l emplacement dans la liste de la carte désirée")
     print("Quel est votre choix")
     print("Si vous ne pouvez pas jouer, entrez -1")
     choix=int(input())
-    while choix>len(cartes_utilisateur)-1 or choix < -1:
+    while choix>len(cartes_joueurs[0])-1 or choix < -1:
         print('Vous avez fait une faute de frappes, l indice choisi est trop élévé')
         print('Quel est votre choix ?')
         choix=int(input())
         #revoir les possibilités pour le choix : pas jolie de mettre le -1
     if choix == -1:
-        pioche(joueur_qui_pioche, cartes_joueurs, jeu_de_cartes,1)
-        if test_carte(cartes_utilisateur[0], fausse, joueur_qui_joue, sens, nbr) == True:
-            depose_carte(carte_utilisateur[0],joueur_qui_joue, sens, nbr)
-            del cartes_utilisateur[0]
-        else:
-            joueur_qui_joue = a_qui_le_tour(sens,joueur_qui_joue)
+        pioche(0, cartes_joueurs, jeu_de_cartes,1)
+        if test_carte(cartes_joueurs[0][0], fausse, joueur_qui_joue, sens, nbr) == True:
+            depose_carte(cartes_joueurs[0][0],joueur_qui_joue, sens, nbr)
+            del cartes_joueurs[0][0]
     else:
-        carte_jouée=cartes_utilisateur[choix]
-        if test_carte(carte_jouée,fausse, joeur_qui_joue, sens, nbr)  == False:
-            choix(nbr,jeu_de_cartes, joueur_qui_joue, fausse, cartes_joueurs)
+        carte_jouée=cartes_joueurs[0][choix]
+        if test_carte(carte_jouée,fausse, joueur_qui_joue, sens, nbr)  == False:
+            choix_cartes(nbr,jeu_de_cartes, joueur_qui_joue, fausse, cartes_joueurs)
         else:
-            depose_carte(carte_utilisateur[0],joueur_qui_joue, sens, nbr)
+            depose_carte(cartes_joueurs[0][choix],joueur_qui_joue, sens, nbr, cartes_joueurs)
+            del cartes_joueurs[0][choix]
 
 
 def jeu(nbr,jeu_de_cartes, joueur_qui_joue, fausse, liste_joueurs, cartes_joueurs):
     if len(jeu_de_cartes)<5:
         mem = [fausse[0]]
         del fausse[0]
-        for i in range(len(fausse)):
-            if len(fausse[i]) == 1: # on supprimer les cartes couleurs
+        for i in range(0,len(fausse)-1):
+            if len(fausse[i]) == 4: # on supprimer les cartes couleurs
                 del fausse[i]
         jeu_de_cartes = jeu_de_cartes + fausse
         fausse=mem
+        print("A toi de jouer", liste_joueurs[joueur_qui_joue])
         print( "La carte du dessus est ", fausse[0])
         if liste_joueurs[joueur_qui_joue] == 'Joueur 1':
-            choix(nbr,jeu_de_cartes, joueur_qui_joue, fausse, liste_joueurs, cartes_joueurs)
+            choix_cartes(nbr,jeu_de_cartes, joueur_qui_joue, fausse, liste_joueurs, cartes_joueurs)
         else:
-            IA(nbr,jeu_de_cartes, joueur_qui_joue, fausse, cartes_joueurs)
-        joueur_qui_joue = a_qui_le_tour(sens, joueur_qui_joue)    
+            IA(nbr,jeu_de_cartes, joueur_qui_joue, fausse, cartes_joueurs) 
     else:
+        print("A toi de jouer", liste_joueurs[joueur_qui_joue])
         print( "La carte du dessus est ", fausse[0])
         if liste_joueurs[joueur_qui_joue] == 'Joueur 1':
-            choix(nbr,jeu_de_cartes, joueur_qui_joue, fausse, liste_joueurs, cartes_joueurs)
+            choix_cartes(nbr,jeu_de_cartes, joueur_qui_joue, fausse, cartes_joueurs)
         else:
             IA(nbr,jeu_de_cartes, joueur_qui_joue, fausse, cartes_joueurs)
-        joueur_qui_joue = a_qui_le_tour(sens, joueur_qui_joue)
+    
 
+        
         # en sortie de test, si la carte a pu être jouée alors supprimer la carte
         #besoin de tester si le paquet de carte est vide si oui, reprendre la fausse, la mélanger et retirer les cartes couleurs
         #choisir si on prend la fonction choix ou non
@@ -364,26 +372,24 @@ liste_joueurs = liste_joueurs()
 nbr = len(liste_joueurs)
 jeu_de_cartes = creation_jeu_de_cartes()
 cartes_joueurs = distribution(nbr, jeu_de_cartes)
-cartes_utilisateur = cartes_joueurs[0]
 
-joueur_qui_commence = liste_joueurs[qui_commence(nbr,liste_joueurs)]
-print('Le joueur débutant la partie est le ',joueur_qui_commence)
-print()
-print()
+joueur_qui_joue = qui_commence(nbr,liste_joueurs)
+joueur_qui_commence = liste_joueurs[joueur_qui_joue]
+
 fausse = fausse(jeu_de_cartes)
-print( "La carte du dessus est ", fausse)
-joeur_qui_joue = joueur_qui_commence
+
 sens='droite'
 
+print('Le joueur débutant la partie est le ',joueur_qui_commence)
+print( "La carte du dessus est ", fausse[0])
+print()
+print()
 
 
-
-# else:
-    
-    
-test_gagnant(cartes_joueurs, nbr, liste_joueurs)
-while test_gagnant==False:
-    jeu(nbr,jeu_de_cartes, joueur_qui_commence, fausse, liste_joueurs, cartes_joueurs)
+while test_gagnant(cartes_joueurs, nbr, liste_joueurs) == False:
+    jeu(nbr,jeu_de_cartes, joueur_qui_joue, fausse, liste_joueurs, cartes_joueurs)
+    joueur_qui_joue = a_qui_le_tour(sens, joueur_qui_joue,nbr)
+    print(joueur_qui_joue)
 #retourner le nom du dernier joueur
 
 
