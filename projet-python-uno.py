@@ -36,10 +36,10 @@ def a_qui_le_tour(sens,joueur_qui_joue,nbr):
     
     
 def choix_cartes(nbr,jeu_de_cartes, joueur_qui_joue, fausse, cartes_joueurs):
-    print()
     print('Vos cartes sont :',cartes_joueurs[0])
+    print()
     print("Choisissez la carte à déposer [0, 1, 2, 3, ...]")
-    print("Si vous ne pouvez pas jouer, entrez -1")
+    print("Entrez -1 pour piocher")
     choix=int(input())
     
     while choix>len(cartes_joueurs[0])-1 or choix < -1:
@@ -143,8 +143,6 @@ def depose_carte(carte_jouée,joueur_qui_joue, sens, nbr,cartes_joueurs):
     else:
         if carte_jouée[0] == fausse[0][0] or carte_jouée[2] == fausse[0][2]:
             fausse.insert(0,carte_jouée)
-            
-    print(sens)
     
 
 
@@ -275,15 +273,15 @@ def IA(nbr,jeu_de_cartes, joueur_qui_joue, fausse, cartes_joueurs,sens):
             j=1
             
     if j == 0:
-        print('Je joue', cartes_joueurs[joueur_qui_joue][i])
+        print('Il a joué', cartes_joueurs[joueur_qui_joue][i])
         depose_carte_IA(cartes_joueurs[joueur_qui_joue][i],joueur_qui_joue, sens, nbr,cartes_joueurs)
         del cartes_joueurs[joueur_qui_joue][i]
         
     else:
-        print('Je pioche')
+        print('Il pioche')
         pioche(joueur_qui_joue, cartes_joueurs, jeu_de_cartes,1)
-        if test_carte(cartes_joueurs[joueur_qui_joue][0], fausse, joueur_qui_joue, sens, nbr) == True:
-            print('Je joue', cartes_joueurs[joueur_qui_joue][0])
+        if test_carte(cartes_joueurs[joueur_qui_joue][0], fausse, joueur_qui_joue, nbr) == True:
+            print('Bonne pioche !', cartes_joueurs[joueur_qui_joue][0])
             depose_carte(cartes_joueurs[joueur_qui_joue][0],joueur_qui_joue, sens, nbr, cartes_joueurs)
             del cartes_joueurs[joueur_qui_joue][0]
 
@@ -298,20 +296,25 @@ def jeu(nbr,jeu_de_cartes, joueur_qui_joue, fausse, liste_joueurs, cartes_joueur
                 del fausse[i]
         jeu_de_cartes = jeu_de_cartes + fausse
         fausse=mem
-        print("A toi de jouer", liste_joueurs[joueur_qui_joue])
-        print( "La carte du dessus est ", fausse[0])
+        print()
+        print()
         if liste_joueurs[joueur_qui_joue] == 'Joueur 1':
-            choix_cartes(nbr,jeu_de_cartes, joueur_qui_joue, fausse, liste_joueurs, cartes_joueurs)
+            print("A vous de jouer Joueur 1")
+            print( "La carte du dessus est ", fausse[0])
+            choix_cartes(nbr,jeu_de_cartes, joueur_qui_joue, fausse, cartes_joueurs)
         else:
-            IA(nbr,jeu_de_cartes, joueur_qui_joue, fausse, cartes_joueurs) 
+            print("C'est au tour de", liste_joueurs[joueur_qui_joue], "de jouer")
+            print( "La carte du dessus est ", fausse[0])
+            IA(nbr,jeu_de_cartes, joueur_qui_joue, fausse, cartes_joueurs,sens)
     else:
         print()
         print()
         if liste_joueurs[joueur_qui_joue] == 'Joueur 1':
-             print("A vous de jouer Joueur 1")
+            print("A vous de jouer Joueur 1")
+            print( "La carte du dessus est ", fausse[0])
             choix_cartes(nbr,jeu_de_cartes, joueur_qui_joue, fausse, cartes_joueurs)
         else:
-            print("A toi de jouer", liste_joueurs[joueur_qui_joue])
+            print("C'est au tour de", liste_joueurs[joueur_qui_joue], "de jouer")
             print( "La carte du dessus est ", fausse[0])
             IA(nbr,jeu_de_cartes, joueur_qui_joue, fausse, cartes_joueurs,sens)
     
@@ -430,8 +433,9 @@ sens= ['droite','gauche']
 while test_gagnant(cartes_joueurs, nbr, liste_joueurs) == False:
     jeu(nbr,jeu_de_cartes, joueur_qui_joue, fausse, liste_joueurs, cartes_joueurs)
     joueur_qui_joue = a_qui_le_tour(sens, joueur_qui_joue,nbr)
-    print(joueur_qui_joue)
-    print(sens)
+    print()
+    print()
+    print("---------------------------------------------------------------------------------")
 #retourner le nom du dernier joueur
 
 
