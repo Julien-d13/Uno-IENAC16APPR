@@ -258,6 +258,7 @@ def distribution(nbr, jeu_de_cartes):
 def fausse(jeu_de_cartes):
     fausse = []
     fausse.append(jeu_de_cartes[0])
+    del jeu_de_cartes[0)
     return fausse
     
 
@@ -317,16 +318,6 @@ def jeu(nbr,jeu_de_cartes, joueur_qui_joue, fausse, liste_joueurs, cartes_joueur
             print("C'est au tour de", liste_joueurs[joueur_qui_joue], "de jouer")
             print( "La carte du dessus est ", fausse[0])
             IA(nbr,jeu_de_cartes, joueur_qui_joue, fausse, cartes_joueurs,sens)
-    
-
-        
-        # en sortie de test, si la carte a pu être jouée alors supprimer la carte
-        #besoin de tester si le paquet de carte est vide si oui, reprendre la fausse, la mélanger et retirer les cartes couleurs
-        #choisir si on prend la fonction choix ou non
-        #faire attention aux fonctions test et dépose pour l'IA
-        
-        #le joker +4 ne donne pas à la personne suivante
-        #faire la passe
     
     
     
@@ -408,6 +399,15 @@ def test_gagnant(cartes_joueurs, nbr, liste_joueurs):
         return False
         
         
+        
+        # en sortie de test, si la carte a pu être jouée alors supprimer la carte
+        #besoin de tester si le paquet de carte est vide si oui, reprendre la fausse, la mélanger et retirer les cartes couleurs
+        #choisir si on prend la fonction choix ou non
+        #faire attention aux fonctions test et dépose pour l'IA
+        
+        #le joker +4 ne donne pas à la personne suivante
+        #faire la passe
+        #changer le joker +4 de l'IA car l'utilisateur choisit la couleur
         
 
     
