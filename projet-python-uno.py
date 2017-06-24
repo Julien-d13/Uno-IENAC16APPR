@@ -324,27 +324,6 @@ def IA(nbr,jeu_de_cartes, joueur_qui_joue, fausse, cartes_joueurs):
 
 
 def jeu(nbr,jeu_de_cartes, joueur_qui_joue, fausse, liste_joueurs, cartes_joueurs):
-    if len(jeu_de_cartes)<5:
-        mem = [fausse[0]]
-        del fausse[0]
-        i=0
-        while i<len(fausse):
-            if len(fausse[i]) == 4: # on supprime les cartes couleurs
-                del fausse[i]
-            i=i+1
-        jeu_de_cartes = jeu_de_cartes + fausse
-        fausse=mem
-        print()
-        print()
-        if liste_joueurs[joueur_qui_joue] == 'Joueur 1':
-            print("A vous de jouer Joueur 1")
-            print( "La carte du dessus est ", fausse[0])
-            choix_cartes(nbr,jeu_de_cartes, joueur_qui_joue, fausse, cartes_joueurs)
-        else:
-            print("C'est au tour de", liste_joueurs[joueur_qui_joue], "de jouer")
-            print( "La carte du dessus est ", fausse[0])
-            IA(nbr,jeu_de_cartes, joueur_qui_joue, fausse, cartes_joueurs)
-    else:
         print()
         print()
         if liste_joueurs[joueur_qui_joue] == 'Joueur 1':
@@ -473,10 +452,16 @@ passe = ['no','yes']
 
 
 while test_gagnant(cartes_joueurs, nbr, liste_joueurs) == False:
-    # print(fausse)
-    # print(jeu_de_cartes)
-    # print(cartes_joueurs[1])
-    # print(cartes_joueurs[2])
+    if len(jeu_de_cartes)<5:
+        mem = [fausse[0]]
+        del fausse[0]
+        i=0
+        while i<len(fausse):
+            if len(fausse[i]) == 4: # on supprime les cartes couleurs
+                del fausse[i]
+            i=i+1
+        jeu_de_cartes = jeu_de_cartes + fausse
+        fausse=mem
     jeu(nbr,jeu_de_cartes, joueur_qui_joue, fausse, liste_joueurs, cartes_joueurs)
     if test_gagnant(cartes_joueurs, nbr, liste_joueurs) == False:
         if len(cartes_joueurs[joueur_qui_joue]) == 1:
@@ -500,5 +485,4 @@ while test_gagnant(cartes_joueurs, nbr, liste_joueurs) == False:
 
 #probleme pour remettre le jeu de cartes à 0 lorsqu'il n'a presque plus de cartes
 #si on ne trouve pas de solution on réduira le nombre de joueurs à 4
-
  
