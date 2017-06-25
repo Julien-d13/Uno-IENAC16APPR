@@ -460,6 +460,7 @@ while test_gagnant(cartes_joueurs, nbr, liste_joueurs) == False:
             if len(fausse[i]) == 4: # on supprime les cartes couleurs
                 del fausse[i]
             i=i+1
+        shuffle(fausse)
         jeu_de_cartes = jeu_de_cartes + fausse
         fausse=mem
     jeu(nbr,jeu_de_cartes, joueur_qui_joue, fausse, liste_joueurs, cartes_joueurs)
