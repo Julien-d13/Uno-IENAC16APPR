@@ -1,7 +1,7 @@
 ###################################################################
-# Fichier projet-python-uno.py
+# Fichier projet-python-uno-v1.2.py
 # Projet python semestre 6
-# BITTERMANN Hugo, LOUISE Romain et RAPIN Julien - Date de début : 06/06/2017 - Date de fin :
+# BITTERMANN Hugo, LOUISE Romain et RAPIN Julien - Date de début : 06/06/2017 - Date de mise à jour : 29/06/17
 ###################################################################
 
 
@@ -423,6 +423,7 @@ def test_gagnant(cartes_joueurs, nbr, liste_joueurs):
     #Mettre un +2 sur un autre +2
     #Interface graphique
     #Compter les points
+    #Mise en réseau pour affronter d'autres vrais joueurs
         
 
     
@@ -446,6 +447,12 @@ passe = ['no','yes']
 
 
 while test_gagnant(cartes_joueurs, nbr, liste_joueurs) == False:
+    for i in range(0,nbr):
+        l=len(cartes_joueurs[i])
+        i=i+1
+        i=str(i)
+        Joueur = 'Joueur '+ i
+        print('Nombre de cartes du ',Joueur, ':', l)
     if len(jeu_de_cartes)<5:
         mem = [fausse[0]]
         del fausse[0]
@@ -473,9 +480,6 @@ while test_gagnant(cartes_joueurs, nbr, liste_joueurs) == False:
     print("---------------------------------------------------------------------------------")
     time.sleep(3)
 
+###################################################################
 
-
-
-#probleme pour remettre le jeu de cartes à 0 lorsqu'il n'a presque plus de cartes
-#si on ne trouve pas de solution on réduira le nombre de joueurs à 4
  
