@@ -77,6 +77,8 @@ def choix_cartes(nbr,jeu_de_cartes, joueur_qui_joue, fausse, cartes_joueurs):
     else:
         carte_jouée=cartes_joueurs[0][choix]
         if test_carte(carte_jouée,fausse, joueur_qui_joue, nbr)  == False:
+            print()
+            print()
             print("Mauvais choix")
             choix_cartes(nbr,jeu_de_cartes, joueur_qui_joue, fausse, cartes_joueurs)
         else:
